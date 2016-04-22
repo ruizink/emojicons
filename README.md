@@ -9,72 +9,72 @@ A very small python script that exposes a CLI and consumes http://emojicons.com/
 
 ```
 $ emoji random
-Title                                Emoji
------------------------------------  -----------------
-nothing to see here                  (̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄
-Beyoncé at Super Bowl Halftime Show  ♪~♪ ヽ໒(⌒o⌒)७ﾉ ♪~♪
-pig who wishes to fly                (｀◔ ω ◔´)
-Would you like some cake?            ( ・∀・)っ旦
-you crazy                            (☞ﾟ∀ﾟ)☞
-stop poking me                       (*・)σσσ(*゜Д゜*)
-praying                              八(＾□＾*)
-Boy Meets Girl                       웃❤유
-gasp face                            (○口○ )
-Bane                                 ⋋( 'Θ')⋌
-one more thing                       (°ロ°)☝
-I rest my case                       ┐( ˘_˘)┌
-NSA Smiley                           ˙ ͜ʟ˙
-face palm                            (－‸ლ)
+  ID  Title                                           Emoji
+----  ----------------------------------------------  -------------------------
+ 208  asian gang                                      (-(-(- -)-)-)
+  99  street fight                                    Ｏ( ｀_´)乂(｀_´ )Ｏ
+ 409  Successful Thesis Defense                       ೖ(⑅σ̑ᴗσ̑)ೖ
+ 205  bunny ears                                      (”)(”)
+ 107  pigs need love too                              (｡･ω･｡)ﾉ♡
+ 254  pew pew                                         (　-_･)σ - - - - - - - - ･
+ 283  Tina Fey writing the last episode of '30 Rock'  ໒(⊙ᴗ⊙)७✎▤
+ 387  Winnie the Pooh                                 ʕ •́؈•̀)
+ 266  Rudolph the Red Nosed Reindeer                  3:*)
+ 270  So happy right now                              (●⌃ٹ⌃)
+ 361  perplexed                                       ( ⧉ ⦣ ⧉ )
+ 152  bowling cat                                     ◎ヽ(^･ω･^=)~
+  52  sleepy                                          (-, - )…zzzZZZ
+  96  flipping dude over                              (╯°Д°）╯︵ /(.□ . \)
 ```
 
 #### Hall of fame
 
 ```
 $ emoji hof
-Title                Emoji
--------------------  --------------
-flipping tables      (╯°□°)╯︵ ┻━┻
-shrug                ¯\_(ツ)_/¯
-look of disapproval  ಠ_ಠ
-happy hands up       ლ(╹◡╹ლ)
-koala bear           ʕ •ᴥ•ʔ
-Nyan Cat             ~=[,,_,,]:3
-headphones           d-_-b
-O Hai                (●°u°●) 」
-kawaii shrug         ╮ (. ❛ ᴗ ❛.) ╭
+  ID  Title                Emoji
+----  -------------------  --------------
+  12  flipping tables      (╯°□°)╯︵ ┻━┻
+   1  shrug                ¯\_(ツ)_/¯
+  39  look of disapproval  ಠ_ಠ
+   5  happy hands up       ლ(╹◡╹ლ)
+  24  koala bear           ʕ •ᴥ•ʔ
+   4  Nyan Cat             ~=[,,_,,]:3
+ 137  headphones           d-_-b
+ 212  O Hai                (●°u°●) 」
+ 220  kawaii shrug         ╮ (. ❛ ᴗ ❛.) ╭
 ```
 
 #### Popular
 
 ```
 $ emoji popular
-Title                Emoji
--------------------  ------------------------
-sleepy flower girl   (◡ ‿ ◡ ✿)
-flipping tables      (╯°□°)╯︵ ┻━┻
-GIVE DIRETIDE        ༼ つ ◕_◕ ༽つ GIVE DIRETIDE
-koala bear           ʕ •ᴥ•ʔ
-y u no               ლ(ಠ益ಠლ)
-look of disapproval  ಠ_ಠ
-smiling breasts      （^人^）
-eff you              ┌∩┐(◣_◢)┌∩┐
-perplexed            ( ⧉ ⦣ ⧉ )
-Nyan Cat             ~=[,,_,,]:3
-middle finger up     t(-.-t)
-sloth                (⊙ω⊙)
-shrug                ¯\_(ツ)_/¯
-I dunno LOL          ¯\(º_o)/¯
+  ID  Title                Emoji
+----  -------------------  ------------------------
+  71  sleepy flower girl   (◡ ‿ ◡ ✿)
+  12  flipping tables      (╯°□°)╯︵ ┻━┻
+ 398  GIVE DIRETIDE        ༼ つ ◕_◕ ༽つ GIVE DIRETIDE
+  24  koala bear           ʕ •ᴥ•ʔ
+  28  y u no               ლ(ಠ益ಠლ)
+  39  look of disapproval  ಠ_ಠ
+  43  smiling breasts      （^人^）
+ 141  eff you              ┌∩┐(◣_◢)┌∩┐
+ 361  perplexed            ( ⧉ ⦣ ⧉ )
+   4  Nyan Cat             ~=[,,_,,]:3
+  45  middle finger up     t(-.-t)
+ 159  sloth                (⊙ω⊙)
+   1  shrug                ¯\_(ツ)_/¯
+   3  I dunno LOL          ¯\(º_o)/¯
 ```
 
 #### Custom search
 
 ```
 $ emoji search table
-Title                  Emoji
----------------------  -----------------------
-flipping tables        (╯°□°)╯︵ ┻━┻
-pudgy table flipping   (ノ ゜Д゜)ノ ︵ ┻━┻
-table flipping battle  (╯°□°)╯︵ ┻━┻ ︵ ╯(°□° ╯)
+  ID  Title                  Emoji
+----  ---------------------  -----------------------
+  12  flipping tables        (╯°□°)╯︵ ┻━┻
+  30  pudgy table flipping   (ノ ゜Д゜)ノ ︵ ┻━┻
+  31  table flipping battle  (╯°□°)╯︵ ┻━┻ ︵ ╯(°□° ╯)
 ```
 
 ### Local operations
