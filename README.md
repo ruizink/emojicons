@@ -3,7 +3,7 @@ A very small python script that exposes a CLI and consumes http://emojicons.com/
 
 ## Available commands
 
-### On-line queries
+### Online queries
 
 #### Random
 
