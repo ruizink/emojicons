@@ -43,6 +43,7 @@ def fetch_emojis(route):
 
 
 def load_file(file_path, graceful=False):
+    """Loads a file into a json object"""
     try:
         with open(file_path) as data_file:
             json_obj = json.load(data_file)
@@ -59,6 +60,7 @@ def load_file(file_path, graceful=False):
 
 
 def save_file(file_path, json_obj):
+    """Saves json object into a file"""
     try:
         with open(file_path, 'w') as outfile:
                 json.dump(json_obj, outfile)
@@ -90,12 +92,14 @@ def site_request(args):
 
 
 def list_offline(args):
+    """Lists the emojis saved to disk"""
     json_file = args.file[0]
     emojis = load_file(json_file)
     print_table(emojis)
 
 
 def save_emojicon(args):
+    """Fetches an emoji online and saves it to disk"""
     json_file = args.file[0]
     emojis = load_file(json_file, graceful=True)
     try:
