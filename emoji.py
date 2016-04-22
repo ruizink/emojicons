@@ -5,67 +5,139 @@
 # (c) 2016, Mario Santos <mario.rf.santos@gmail.com>
 #
 
-from lxml import html
+import os
+import sys
+import re
+import json
 import requests
 import argparse
+from lxml import html
 from tabulate import tabulate
 
 EMOJICONS_URL = 'http://emojicons.com/'
-ENDPOINTS = {
+ROUTES = {
     'search': 'tag/%s',
     'hof': 'hall-of-fame',
     'popular': 'popular',
-    'random': 'random'
+    'random': 'random',
+    'get': 'e/%s'
 }
 XPATHS = {
+    'ids': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/@id',
     'titles': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/div[@class="title"]/a/text()',
     'emojis': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/div[@class="listing"]//textarea/text()'
 }
 
 
-def fetch_emojis(endpoint):
-    url = EMOJICONS_URL + endpoint
+def fetch_emojis(route):
+    """Requests a given route and parses the results"""
+    url = EMOJICONS_URL + route
     page = requests.get(url)
     tree = html.fromstring(page.text)
-    titles = tree.xpath(XPATHS.get('titles'))
-    emojis = tree.xpath(XPATHS.get('emojis'))
-    return titles, emojis
+    emojis = []
+    for id, t, e in zip([re.search("^emoticon-(\d+)$", x).group(1) for x in tree.xpath(XPATHS.get('ids'))],
+                        tree.xpath(XPATHS.get('titles')),
+                        tree.xpath(XPATHS.get('emojis'))):
+        emojis.append({'id': id, 'title': t, 'emoji': e})
+    return emojis
 
 
-def print_table(emoji_list):
-    table = []
-    for t, e in zip(*emoji_list):
-        table.append([t, e])
-    if len(table) > 0:
-        print tabulate(table, headers=["Title", "Emoji"])
+def load_file(file_path, graceful=False):
+    try:
+        with open(file_path) as data_file:
+            json_obj = json.load(data_file)
+    except IOError:
+        if graceful:
+            json_obj = []
+        else:
+            print "¯\_(ツ)_/¯ There is no such file: '%s'" % file_path
+            sys.exit(1)
+    except ValueError:
+        print "¯\_(ツ)_/¯ That's not JSON at all! '%s'" % file_path
+        sys.exit(2)
+    return json_obj
+
+
+def save_file(file_path, json_obj):
+    try:
+        with open(file_path, 'w') as outfile:
+                json.dump(json_obj, outfile)
+    except IOError:
+        print "¯\_(ツ)_/¯ Can't even open the file for writing: '%s'" % file_path
+        sys.exit(1)
+
+
+def print_table(emojis):
+    """Prints a table with the emoji_list"""
+    if len(emojis) > 0:
+        table = []
+        for i in emojis:
+            table.append([i.get('id'), i.get('title'), i.get('emoji')])
+        print tabulate(table, headers=["ID", "Title", "Emoji"])
     else:
         print "¯\_(ツ)_/¯ Nothing to see here..."
 
 
-def route_cmd(args):
-    subparser_name = str(args.subparser_name)
+def site_request(args):
+    """Builds a route and prints the results"""
+    subparser_name = args.subparser_name
     try:
         subargs = ' '.join(args.str)
-        #print "Executing command: %s with args %s..." % (subparser_name, subargs)
-        emojis_list = fetch_emojis(ENDPOINTS.get(subparser_name) % subargs)
+        emojis = fetch_emojis(ROUTES.get(subparser_name) % subargs)
     except AttributeError:
-        #print "Executing command: %s..." % subparser_name
-        emojis_list = fetch_emojis(ENDPOINTS.get(subparser_name))
-    print_table(emojis_list)
+        emojis = fetch_emojis(ROUTES.get(subparser_name))
+    print_table(emojis)
 
-if __name__ == "__main__":
+
+def list_offline(args):
+    json_file = args.file[0]
+    emojis = load_file(json_file)
+    print_table(emojis)
+
+
+def save_emojicon(args):
+    json_file = args.file[0]
+    emojis = load_file(json_file, graceful=True)
+    try:
+        emoji = fetch_emojis(ROUTES.get('get') % args.id[0])[0]
+        if emoji.get('id') not in [x.get('id') for x in emojis]:
+            emojis.append(emoji)
+            save_file(json_file, [dict(t) for t in set(tuple(i.items()) for i in emojis)])
+            print "Emoji saved to '%s'" % json_file
+            print_table([emoji])
+        else:
+            print "¯\_(ツ)_/¯ Emoji with id '%s' already saved!" % args.id[0]
+    except IndexError:
+        print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % args.id[0]
+        sys.exit(3)
+
+
+def main():
+    """Program entry point"""
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(help='sub-command help', dest='subparser_name')
-    parser.set_defaults(func=route_cmd)
+    parser.set_defaults(func=site_request)
 
     search = subparsers.add_parser('search', help='search for an emojicon')
     search.add_argument('str', nargs='*', help='search string')
 
-    hof = subparsers.add_parser('hof', help='show the hall of fame')
+    save = subparsers.add_parser('save', help='save an emojicon to filesystem')
+    save.add_argument('id', nargs=1, help='id of the emojicon')
+    save.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    save.set_defaults(func=save_emojicon)
 
-    popular = subparsers.add_parser('popular', help='show popular stuff')
+    subparsers.add_parser('hof', help='shows the hall of fame')
 
-    random = subparsers.add_parser('random', help='show random stuff')
+    subparsers.add_parser('popular', help='shows popular stuff')
+
+    subparsers.add_parser('random', help='shows random stuff')
+
+    offline_l = subparsers.add_parser('list', help='lists all emojis currently saved in filesystem')
+    offline_l.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    offline_l.set_defaults(func=list_offline)
 
     args = parser.parse_args()
     args.func(args)
+
+if __name__ == "__main__":
+    main()
