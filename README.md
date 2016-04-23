@@ -100,3 +100,10 @@ $ emoji list
    3  I dunno LOL  ¯\(º_o)/¯
    1  shrug        ¯\_(ツ)_/¯
 ```
+
+#### Delete from file
+
+```
+$ emoji delete 284
+Emoji with id '284' deleted from '~/.emoji.json'
+```

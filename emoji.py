@@ -101,20 +101,34 @@ def list_offline(args):
 def save_emojicon(args):
     """Fetches an emoji online and saves it to disk"""
     json_file = args.file[0]
+    emoji_id = args.id[0]
     emojis = load_file(json_file, graceful=True)
     try:
-        emoji = fetch_emojis(ROUTES.get('get') % args.id[0])[0]
+        emoji = fetch_emojis(ROUTES.get('get') % emoji_id)[0]
         if emoji.get('id') not in [x.get('id') for x in emojis]:
             emojis.append(emoji)
-            save_file(json_file, [dict(t) for t in set(tuple(i.items()) for i in emojis)])
+            save_file(json_file, emojis)
             print "Emoji saved to '%s'" % json_file
             print_table([emoji])
         else:
-            print "¯\_(ツ)_/¯ Emoji with id '%s' already saved!" % args.id[0]
+            print "¯\_(ツ)_/¯ Emoji with id '%s' already saved!" % emoji_id
     except IndexError:
-        print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % args.id[0]
+        print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id
         sys.exit(3)
 
+
+def delete_emojicon(args):
+    """Deletes an emoji from disk"""
+    json_file = args.file[0]
+    emoji_id = args.id[0]
+    emojis = load_file(json_file, graceful=True)
+    if emoji_id in [x.get('id') for x in emojis]:
+        emojis[:] = [e for e in emojis if e.get('id') != emoji_id]
+        save_file(json_file, emojis)
+        print "Emoji with id '%s' deleted from '%s'" % (emoji_id, json_file)
+    else:
+        print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id
+        sys.exit(3)
 
 def main():
     """Program entry point"""
@@ -125,20 +139,25 @@ def main():
     search = subparsers.add_parser('search', help='search for an emojicon')
     search.add_argument('str', nargs='*', help='search string')
 
-    save = subparsers.add_parser('save', help='save an emojicon to filesystem')
-    save.add_argument('id', nargs=1, help='id of the emojicon')
-    save.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
-    save.set_defaults(func=save_emojicon)
-
     subparsers.add_parser('hof', help='shows the hall of fame')
 
     subparsers.add_parser('popular', help='shows popular stuff')
 
     subparsers.add_parser('random', help='shows random stuff')
 
-    offline_l = subparsers.add_parser('list', help='lists all emojis currently saved in filesystem')
-    offline_l.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
-    offline_l.set_defaults(func=list_offline)
+    save_e = subparsers.add_parser('save', help='save an emojicon to filesystem')
+    save_e.add_argument('id', nargs=1, help='id of the emojicon')
+    save_e.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    save_e.set_defaults(func=save_emojicon)
+
+    delete_e = subparsers.add_parser('delete', help='delete an emojicon from filesystem')
+    delete_e.add_argument('id', nargs=1, help='id of the emojicon')
+    delete_e.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    delete_e.set_defaults(func=delete_emojicon)
+
+    list_e = subparsers.add_parser('list', help='lists all emojis currently saved in filesystem')
+    list_e.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    list_e.set_defaults(func=list_offline)
 
     args = parser.parse_args()
     args.func(args)
