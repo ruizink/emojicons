@@ -91,7 +91,7 @@ Emoji saved to '~/.emoji.json'
    1  shrug    ¯\_(ツ)_/¯
 ```
 
-#### List emojis form file
+#### List emojis from file
 
 ```
 $ emoji list

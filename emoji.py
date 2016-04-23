@@ -130,6 +130,7 @@ def delete_emojicon(args):
         print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id
         sys.exit(3)
 
+
 def main():
     """Program entry point"""
     parser = argparse.ArgumentParser()
