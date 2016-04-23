@@ -147,16 +147,16 @@ def main():
 
     save_e = subparsers.add_parser('save', help='save an emojicon to filesystem')
     save_e.add_argument('id', nargs=1, help='id of the emojicon')
-    save_e.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    save_e.add_argument('--file', '-f', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
     save_e.set_defaults(func=save_emojicon)
 
     delete_e = subparsers.add_parser('delete', help='delete an emojicon from filesystem')
     delete_e.add_argument('id', nargs=1, help='id of the emojicon')
-    delete_e.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    delete_e.add_argument('--file', '-f', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
     delete_e.set_defaults(func=delete_emojicon)
 
     list_e = subparsers.add_parser('list', help='lists all emojis currently saved in filesystem')
-    list_e.add_argument('--file', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    list_e.add_argument('--file', '-f', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
     list_e.set_defaults(func=list_offline)
 
     args = parser.parse_args()
