@@ -14,30 +14,31 @@ import argparse
 from lxml import html
 from tabulate import tabulate
 
-EMOJICONS_URL = 'http://emojicons.com/'
-ROUTES = {
-    'search': 'tag/%s',
-    'hof': 'hall-of-fame',
-    'popular': 'popular',
-    'random': 'random',
-    'get': 'e/%s'
+_config = {
+    'emojicons_baseurl': 'http://emojicons.com/',
+    'route': {
+        'search': 'tag/%s',
+        'hof': 'hall-of-fame',
+        'popular': 'popular',
+        'random': 'random',
+        'get': 'e/%s'
+    },
+    'xpath': {
+        'ids': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/@id',
+        'titles': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/div[@class="title"]/a/text()',
+        'emojis': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/div[@class="listing"]//textarea/text()'
+    }
 }
-XPATHS = {
-    'ids': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/@id',
-    'titles': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/div[@class="title"]/a/text()',
-    'emojis': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/div[@class="listing"]//textarea/text()'
-}
-
 
 def fetch_emojis(route):
     """Requests a given route and parses the results"""
-    url = EMOJICONS_URL + route
+    url = _config['emojicons_baseurl'] + route
     page = requests.get(url)
     tree = html.fromstring(page.text)
     emojis = []
-    for id, t, e in zip([re.search("^emoticon-(\d+)$", x).group(1) for x in tree.xpath(XPATHS.get('ids'))],
-                        tree.xpath(XPATHS.get('titles')),
-                        tree.xpath(XPATHS.get('emojis'))):
+    for id, t, e in zip([re.search("^emoticon-(\d+)$", x).group(1) for x in tree.xpath(_config['xpath']['ids'])],
+                        tree.xpath(_config['xpath']['titles']),
+                        tree.xpath(_config['xpath']['emojis'])):
         emojis.append({'id': id, 'title': t, 'emoji': e})
     return emojis
 
@@ -85,9 +86,9 @@ def site_request(args):
     subparser_name = args.subparser_name
     try:
         subargs = ' '.join(args.str)
-        emojis = fetch_emojis(ROUTES.get(subparser_name) % subargs)
+        emojis = fetch_emojis(_config['route'][subparser_name] % subargs)
     except AttributeError:
-        emojis = fetch_emojis(ROUTES.get(subparser_name))
+        emojis = fetch_emojis(_config['route'][subparser_name])
     print_table(emojis)
 
 
@@ -104,7 +105,7 @@ def save_emojicon(args):
     emoji_id = args.id[0]
     emojis = load_file(json_file, graceful=True)
     try:
-        emoji = fetch_emojis(ROUTES.get('get') % emoji_id)[0]
+        emoji = fetch_emojis(_config['route']['get'] % emoji_id)[0]
         if emoji.get('id') not in [x.get('id') for x in emojis]:
             emojis.append(emoji)
             save_file(json_file, emojis)
