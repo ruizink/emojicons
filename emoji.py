@@ -7,12 +7,15 @@
 
 import os
 import sys
+import logging
 import re
 import json
 import requests
 import argparse
 from lxml import html
 from tabulate import tabulate
+
+logging.basicConfig(stream=sys.stderr, level=logging.WARNING, format='%(levelname)s:%(asctime)s:%(message)s')
 
 _config = {
     'emojicons_baseurl': 'http://emojicons.com/',
@@ -33,6 +36,7 @@ _config = {
 def fetch_emojis(route):
     """Requests a given route and parses the results"""
     url = _config['emojicons_baseurl'] + route
+    logging.debug("Requesting URL '%s'" % url)
     page = requests.get(url)
     tree = html.fromstring(page.text)
     emojis = []
@@ -48,14 +52,15 @@ def load_file(file_path, graceful=False):
     try:
         with open(file_path) as data_file:
             json_obj = json.load(data_file)
+        logging.debug("Loaded JSON file from '%s'" % file_path)
     except IOError:
         if graceful:
             json_obj = []
         else:
-            print "¯\_(ツ)_/¯ There is no such file: '%s'" % file_path
+            logging.error("¯\_(ツ)_/¯ There is no such file: '%s'" % file_path)
             sys.exit(1)
     except ValueError:
-        print "¯\_(ツ)_/¯ That's not JSON at all! '%s'" % file_path
+        logging.error("¯\_(ツ)_/¯ That's not JSON at all! '%s'" % file_path)
         sys.exit(2)
     return json_obj
 
@@ -64,9 +69,10 @@ def save_file(file_path, json_obj):
     """Saves json object into a file"""
     try:
         with open(file_path, 'w') as outfile:
-                json.dump(json_obj, outfile)
+            json.dump(json_obj, outfile)
+        logging.debug("Saved JSON to file '%s'" % file_path)
     except IOError:
-        print "¯\_(ツ)_/¯ Can't even open the file for writing: '%s'" % file_path
+        logging.error("¯\_(ツ)_/¯ Can't even open the file for writing: '%s'" % file_path)
         sys.exit(1)
 
 
@@ -114,7 +120,7 @@ def save_emojicon(args):
         else:
             print "¯\_(ツ)_/¯ Emoji with id '%s' already saved!" % emoji_id
     except IndexError:
-        print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id
+        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id)
         sys.exit(3)
 
 
@@ -128,7 +134,7 @@ def delete_emojicon(args):
         save_file(json_file, emojis)
         print "Emoji with id '%s' deleted from '%s'" % (emoji_id, json_file)
     else:
-        print "¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id
+        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id)
         sys.exit(3)
 
 
