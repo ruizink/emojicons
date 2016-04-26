@@ -6,6 +6,12 @@
 
 A very small python script that exposes a CLI and consumes http://emojicons.com/
 
+## Installation
+
+```
+pip install emojicons
+```
+
 ## Available commands
 
 ### Online queries
@@ -112,3 +118,11 @@ $ emoji list
 $ emoji delete 284
 Emoji with id '284' deleted from '~/.emoji.json'
 ```
+
+## Author
+
+Mário Santos
+
+@\_RuiZinK\_
+
+[ruizinkdojo.com](https://ruizinkdojo.com/)
