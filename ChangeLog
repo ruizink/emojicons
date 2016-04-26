@@ -1,0 +1,17 @@
+CHANGES
+=======
+
+1.0.0
+-----
+
+* Fixes #2 and #3. Using pbr for building python module
+* Fixes #1. Added default python logging facility
+* Moved config to single dict for consistency
+* Fixed typo and PEP8
+* Added alias '-f' to '--file' argument
+* Added delete operation from filesystem
+* Updated README
+* Typo
+* Documentation
+* Added local filesystem operations
+* First draft
