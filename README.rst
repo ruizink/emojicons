@@ -1,6 +1,8 @@
 emojicons
 =========
 
+|PyPI version| |PyPI downloads| |Build Status|
+
 A very small python script that exposes a CLI and consumes
 http://emojicons.com/
 
@@ -121,3 +123,10 @@ Delete from file
 
     $ emoji delete 284
     Emoji with id '284' deleted from '~/.emoji.json'
+
+.. |PyPI version| image:: https://badge.fury.io/py/emojicons.svg
+   :target: https://pypi.python.org/pypi/emojicons/
+.. |PyPI downloads| image:: https://img.shields.io/pypi/dm/emojicons.svg?maxAge=2592000
+   :target: https://pypi.python.org/pypi/emojicons/
+.. |Build Status| image:: https://travis-ci.org/ruizink/emojicons.svg?branch=master
+   :target: https://travis-ci.org/ruizink/emojicons
