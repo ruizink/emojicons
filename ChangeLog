@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+* Updated README
+* Added Travis CI and PyPI badges
+
 1.0.2
 -----
 

@@ -1,7 +1,7 @@
 # emojicons
 
-[![PyPI version](https://badge.fury.io/py/emojicons.svg)](https://pypi.python.org/pypi/emojicons/)
-[![PyPI downloads](https://img.shields.io/pypi/dm/emojicons.svg?maxAge=2592000)](https://pypi.python.org/pypi/emojicons/)
+[![PyPI version](https://img.shields.io/pypi/v/emojicons.svg?maxAge=3600)](https://pypi.python.org/pypi/emojicons/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/emojicons.svg?maxAge=3600)](https://pypi.python.org/pypi/emojicons/)
 [![Build Status](https://travis-ci.org/ruizink/emojicons.svg?branch=master)](https://travis-ci.org/ruizink/emojicons)
 
 A very small python script that exposes a CLI and consumes http://emojicons.com/

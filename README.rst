@@ -140,9 +140,9 @@ Mário Santos
 
 `ruizinkdojo.com <https://ruizinkdojo.com/>`__
 
-.. |PyPI version| image:: https://badge.fury.io/py/emojicons.svg
+.. |PyPI version| image:: https://img.shields.io/pypi/v/emojicons.svg?maxAge=3600
    :target: https://pypi.python.org/pypi/emojicons/
-.. |PyPI downloads| image:: https://img.shields.io/pypi/dm/emojicons.svg?maxAge=2592000
+.. |PyPI downloads| image:: https://img.shields.io/pypi/dm/emojicons.svg?maxAge=3600
    :target: https://pypi.python.org/pypi/emojicons/
 .. |Build Status| image:: https://travis-ci.org/ruizink/emojicons.svg?branch=master
    :target: https://travis-ci.org/ruizink/emojicons
