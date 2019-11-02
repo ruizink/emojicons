@@ -1,12 +1,21 @@
 CHANGES
 =======
 
+2.0.1
+-----
+
+* Fix argparse and unicode issues
+
 2.0.0
 -----
 
 * Add feature to copy to clipboard
 * Refactor and python3 support
 * Use string format
+
+1.0.2
+-----
+
 * Updated PyPI badges
 * Updated README
 * Added Travis CI and PyPI badges

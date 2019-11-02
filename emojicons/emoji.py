@@ -5,6 +5,8 @@
 # (c) 2016, Mario Santos <mario.rf.santos@gmail.com>
 #
 
+from __future__ import unicode_literals
+
 import os
 import sys
 import logging
@@ -164,7 +166,7 @@ def delete_emojicon(args):
 def main():
     """Program entry point"""
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(required=True, dest='subcommand', help='subcommand help')
+    subparsers = parser.add_subparsers(dest='subcommand', help='subcommand help')
 
     search = subparsers.add_parser('search', help='search for an emojicon')
     search.add_argument('str', nargs='*', help='search string')
@@ -199,7 +201,10 @@ def main():
     clip.set_defaults(func=copy_to_clip)
 
     args = parser.parse_args()
-    args.func(args)
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
     main()
