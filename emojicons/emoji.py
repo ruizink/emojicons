@@ -20,11 +20,11 @@ logging.basicConfig(stream=sys.stderr, level=logging.WARNING, format='%(levelnam
 _config = {
     'emojicons_baseurl': 'http://emojicons.com/',
     'route': {
-        'search': 'tag/%s',
+        'search': 'tag/{text}',
         'hof': 'hall-of-fame',
         'popular': 'popular',
         'random': 'random',
-        'get': 'e/%s'
+        'get': 'e/{id}'
     },
     'xpath': {
         'ids': '//div[@class="emoticons-list"]/div[@class="emoticon-item"]/@id',
@@ -36,7 +36,7 @@ _config = {
 def fetch_emojis(route):
     """Requests a given route and parses the results"""
     url = _config['emojicons_baseurl'] + route
-    logging.debug("Requesting URL '%s'" % url)
+    logging.debug("Requesting URL '{0}'".format(url))
     page = requests.get(url)
     tree = html.fromstring(page.text)
     emojis = []
@@ -52,15 +52,15 @@ def load_file(file_path, graceful=False):
     try:
         with open(file_path) as data_file:
             json_obj = json.load(data_file)
-        logging.debug("Loaded JSON file from '%s'" % file_path)
+        logging.debug("Loaded JSON file from '{0}'".format(file_path))
     except IOError:
         if graceful:
             json_obj = []
         else:
-            logging.error("¯\_(ツ)_/¯ There is no such file: '%s'" % file_path)
+            logging.error("¯\_(ツ)_/¯ There is no such file: '{0}'".format(file_path))
             sys.exit(1)
     except ValueError:
-        logging.error("¯\_(ツ)_/¯ That's not JSON at all! '%s'" % file_path)
+        logging.error("¯\_(ツ)_/¯ That's not JSON at all! '{0}'".format(file_path))
         sys.exit(2)
     return json_obj
 
@@ -70,9 +70,9 @@ def save_file(file_path, json_obj):
     try:
         with open(file_path, 'w') as outfile:
             json.dump(json_obj, outfile)
-        logging.debug("Saved JSON to file '%s'" % file_path)
+        logging.debug("Saved JSON to file '{0}'".format(file_path))
     except IOError:
-        logging.error("¯\_(ツ)_/¯ Can't even open the file for writing: '%s'" % file_path)
+        logging.error("¯\_(ツ)_/¯ Can't even open the file for writing: {0}'".format(file_path))
         sys.exit(1)
 
 
@@ -111,16 +111,17 @@ def save_emojicon(args):
     emoji_id = args.id[0]
     emojis = load_file(json_file, graceful=True)
     try:
-        emoji = fetch_emojis(_config['route']['get'] % emoji_id)[0]
+        emoji = fetch_emojis(_config['route']['get'].format(id=emoji_id))[0]
         if emoji.get('id') not in [x.get('id') for x in emojis]:
             emojis.append(emoji)
             save_file(json_file, emojis)
-            print "Emoji saved to '%s'" % json_file
+            print("Emoji saved to '{0}'".format(json_file))
             print_table([emoji])
         else:
-            print "¯\_(ツ)_/¯ Emoji with id '%s' already saved!" % emoji_id
+            print("¯\_(ツ)_/¯ Emoji with id '{0}' already saved!".format(emoji_id))
     except IndexError:
-        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id)
+        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with id '{0}'!"
+                      .format(emoji_id))
         sys.exit(3)
 
 
