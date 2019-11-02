@@ -82,19 +82,23 @@ def print_table(emojis):
         table = []
         for i in emojis:
             table.append([i.get('id'), i.get('title'), i.get('emoji')])
-        print tabulate(table, headers=["ID", "Title", "Emoji"])
+        print(tabulate(table, headers=["ID", "Title", "Emoji"]))
     else:
-        print "¯\_(ツ)_/¯ Nothing to see here..."
+        print("¯\_(ツ)_/¯ Nothing to see here...")
 
 
-def site_request(args):
+def do_request(route, text):
     """Builds a route and prints the results"""
-    subparser_name = args.subparser_name
-    try:
-        subargs = ' '.join(args.str)
-        emojis = fetch_emojis(_config['route'][subparser_name] % subargs)
-    except AttributeError:
-        emojis = fetch_emojis(_config['route'][subparser_name])
+    emojis = fetch_emojis(_config['route'][route].format(text=text))
+    return emojis
+
+
+def go_fetch(args):
+    """Expand the args, do the site request and print the results"""
+    if hasattr(args, 'str'):
+        emojis = do_request(args.subcommand, ' '.join(args.str))
+    else:
+        emojis = do_request(args.subcommand)
     print_table(emojis)
 
 
@@ -133,26 +137,29 @@ def delete_emojicon(args):
     if emoji_id in [x.get('id') for x in emojis]:
         emojis[:] = [e for e in emojis if e.get('id') != emoji_id]
         save_file(json_file, emojis)
-        print "Emoji with id '%s' deleted from '%s'" % (emoji_id, json_file)
+        print("Emoji with id '{0}' deleted from '{1}'".format(emoji_id, json_file))
     else:
-        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with id '%s'!" % emoji_id)
+        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with id '{0}'!".format(emoji_id))
         sys.exit(3)
 
 
 def main():
     """Program entry point"""
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(help='sub-command help', dest='subparser_name')
-    parser.set_defaults(func=site_request)
+    subparsers = parser.add_subparsers(required=True, dest='subcommand', help='subcommand help')
 
     search = subparsers.add_parser('search', help='search for an emojicon')
     search.add_argument('str', nargs='*', help='search string')
+    search.set_defaults(func=go_fetch)
 
-    subparsers.add_parser('hof', help='shows the hall of fame')
+    hof = subparsers.add_parser('hof', help='shows the hall of fame')
+    hof.set_defaults(func=go_fetch)
 
-    subparsers.add_parser('popular', help='shows popular stuff')
+    popular = subparsers.add_parser('popular', help='shows popular stuff')
+    popular.set_defaults(func=go_fetch)
 
-    subparsers.add_parser('random', help='shows random stuff')
+    random = subparsers.add_parser('random', help='shows random stuff')
+    random.set_defaults(func=go_fetch)
 
     save_e = subparsers.add_parser('save', help='save an emojicon to filesystem')
     save_e.add_argument('id', nargs=1, help='id of the emojicon')
