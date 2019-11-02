@@ -112,6 +112,14 @@ Save to file
     ----  -------  ---------
        1  shrug    ¯\_(ツ)_/¯
 
+Copy to clipboard
+^^^^^^^^^^^^^^^^^
+
+::
+
+    $ emoji clip 1
+    Emoji '¯\_(ツ)_/¯' copied to clipboard!
+
 List emojis from file
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -137,8 +145,6 @@ Author
 Mário Santos
 
 @\_RuiZinK\_
-
-`ruizinkdojo.com <https://ruizinkdojo.com/>`__
 
 .. |PyPI version| image:: https://img.shields.io/pypi/v/emojicons.svg?maxAge=3600
    :target: https://pypi.python.org/pypi/emojicons/

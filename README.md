@@ -102,6 +102,13 @@ Emoji saved to '~/.emoji.json'
    1  shrug    ¯\_(ツ)_/¯
 ```
 
+#### Copy to clipboard
+
+```
+$ emoji clip 1
+Emoji '¯\_(ツ)_/¯' copied to clipboard!
+```
+
 #### List emojis from file
 
 ```
@@ -124,5 +131,3 @@ Emoji with id '284' deleted from '~/.emoji.json'
 Mário Santos
 
 @\_RuiZinK\_
-
-[ruizinkdojo.com](https://ruizinkdojo.com/)

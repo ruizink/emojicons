@@ -1,22 +1,17 @@
 CHANGES
 =======
 
+2.0.0
+-----
+
+* Add feature to copy to clipboard
+* Refactor and python3 support
+* Use string format
+* Updated PyPI badges
 * Updated README
 * Added Travis CI and PyPI badges
-
-1.0.2
------
-
 * Renamed license file
-
-1.0.1
------
-
 * Updated License in classifiers
-
-1.0.0
------
-
 * Fixes #2 and #3. Using pbr for building python module
 * Fixes #1. Added default python logging facility
 * Moved config to single dict for consistency

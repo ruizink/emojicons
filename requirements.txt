@@ -1,3 +1,4 @@
 lxml>=3.4
 tabulate>=0.7
 requests>=2.9
+pyperclip>=1.3

@@ -12,6 +12,7 @@ import re
 import json
 import requests
 import argparse
+import pyperclip
 from lxml import html
 from tabulate import tabulate
 
@@ -129,6 +130,23 @@ def save_emojicon(args):
         sys.exit(3)
 
 
+def copy_to_clip(args):
+    """Copies an emoji from disk to the clipboard"""
+    json_file = args.file[0]
+    emoji_id = args.id[0]
+    emojis = load_file(json_file, graceful=True)
+    filtered_list = list(filter(lambda x: x.get('id') == emoji_id 
+                         or x.get('title') == emoji_id,
+                         emojis))
+    if len(filtered_list) == 1:
+        emoji = filtered_list[0].get('emoji')
+        pyperclip.copy(emoji)
+        print("Emoji '{0}' copied to clipboard!".format(emoji))
+    else:
+        logging.error("¯\_(ツ)_/¯ Couldn't find the emoji with title or id '{0}'!".format(emoji_id))
+        sys.exit(3)
+
+
 def delete_emojicon(args):
     """Deletes an emoji from disk"""
     json_file = args.file[0]
@@ -174,6 +192,11 @@ def main():
     list_e = subparsers.add_parser('list', help='lists all emojis currently saved in filesystem')
     list_e.add_argument('--file', '-f', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
     list_e.set_defaults(func=list_offline)
+
+    clip = subparsers.add_parser('clip', help='copy an emojicon to the clipboard')
+    clip.add_argument('id', nargs=1, help='id of the emojicon')
+    clip.add_argument('--file', '-f', nargs=1, default=[os.getenv('HOME') + '/.emoji.json'])
+    clip.set_defaults(func=copy_to_clip)
 
     args = parser.parse_args()
     args.func(args)
